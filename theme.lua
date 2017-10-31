@@ -13,7 +13,7 @@ local os, math, string = os, math, string
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/awesomelaawesome"
-theme.wallpaper                                 = ".config/awesome/wp.png"
+theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "xos4 Terminus 9"
 theme.fg_normal                                 = "#FEFEFE"
 theme.fg_focus                                  = "#32D6FF"
