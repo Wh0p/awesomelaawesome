@@ -138,23 +138,34 @@ local mail = lain.widget.imap({
 })
 --]]
 
--- ALSA volume
+-- volume
 local volicon = wibox.widget.imagebox(theme.widget_music)
-theme.volume = lain.widget.alsa({
-     --togglechannel = "IEC958,3",
-     settings = function()
-         header = " Vol "                                                                                                
-         vlevel  = volume_now.level
- 
-         if volume_now.status == "off" or volume_now.level == 0 then
-             vlevel = vlevel .. "M "
-         else
-             vlevel = vlevel .. " "
-         end
- 
+theme.volume = lain.widget.pulse ({
+    settings = function()
+        header = " Vol "                                                                                                
+        vlevel = volume_now.left .. "%"
+        if volume_now.muted == "yes" then
+            vlevel = vlevel .. " M"
+        end
         widget:set_markup(markup.font(theme.font, markup(theme.fg_normal, header) .. markup(theme.fg_normal, vlevel)))
-     end
+    end
 })
+
+--theme.volume = lain.widget.alsa({
+--     --togglechannel = "IEC958,3",
+--     settings = function()
+--         header = " Vol "                                                                                                
+--         vlevel  = volume_now.level
+-- 
+--         if volume_now.status == "off" or volume_now.level == 0 then
+--             vlevel = vlevel .. "M "
+--         else
+--             vlevel = vlevel .. " "
+--         end
+-- 
+--        widget:set_markup(markup.font(theme.font, markup(theme.fg_normal, header) .. markup(theme.fg_normal, vlevel)))
+--     end
+--})
 
 
 -- Weather
@@ -319,7 +330,6 @@ function theme.at_screen_connect(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
             arrow(theme.bg_normal, "#343434"),
             wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
             arrow("#343434", "#8F654B"),
