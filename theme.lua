@@ -308,13 +308,16 @@ function theme.at_screen_connect(s)
                            awful.button({ }, 4, function () awful.layout.inc( 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(-1) end)))
     -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, awful.util.taglist_buttons)
+    s.mytaglist0 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 0  end, awful.util.taglist_buttons)
+    s.mytaglist1 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 1  end, awful.util.taglist_buttons)
+    s.mytaglist2 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 2  end, awful.util.taglist_buttons)
+    s.mytaglist3 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 3  end, awful.util.taglist_buttons)
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 16, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -322,8 +325,14 @@ function theme.at_screen_connect(s)
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
             --spr,
-            wibox.container.background(wibox.container.margin(s.mytaglist, 4, 7),"#5B799D"),
-            arrowr("#5B799D", "#A43464"),
+            wibox.container.background(wibox.container.margin(s.mytaglist0, 4, 7),"#5B799D"),
+            arrowr("#5B799D","#3B597D"),
+            wibox.container.background(wibox.container.margin(s.mytaglist1, 4, 7),"#3B597D"),
+            arrowr("#3B597D","#1B395D"),
+            wibox.container.background(wibox.container.margin(s.mytaglist2, 4, 7),"#1B395D"),
+            arrowr("#1B395D","#0B193D"),
+            wibox.container.background(wibox.container.margin(s.mytaglist3, 4, 7),"#0B193D"),
+            arrowr("#0B193D", "#A43464"),
             wibox.container.background(wibox.container.margin(s.mypromptbox, 4, 17), "#A43464"),
             arrowr("#A43464", theme.bg_normal),
         },
