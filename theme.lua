@@ -28,6 +28,7 @@ theme.border_width                              = 1
 theme.border_normal                             = "#3F3F3F"
 theme.border_focus                              = "#6F6F6F"
 theme.border_marked                             = "#CC9393"
+theme.prompt_bg                                 = "#A43464"
 theme.titlebar_bg_focus                         = "#3F3F3F"
 theme.titlebar_bg_normal                        = "#3F3F3F"
 theme.titlebar_bg_focus                         = theme.bg_focus
@@ -309,58 +310,112 @@ function theme.at_screen_connect(s)
                            awful.button({ }, 5, function () awful.layout.inc(-1) end)))
     -- Create a taglist widget
     s.mytaglist0 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 0  end, awful.util.taglist_buttons)
-    s.mytaglist1 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 1  end, awful.util.taglist_buttons)
-    s.mytaglist2 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 2  end, awful.util.taglist_buttons)
-    s.mytaglist3 = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 3  end, awful.util.taglist_buttons)
+    s.mytaglistg = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 1  end, awful.util.taglist_buttons)
+    s.mytaglisth = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 2  end, awful.util.taglist_buttons)
+    s.mytaglistt = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 3  end, awful.util.taglist_buttons)
+    s.mytaglistn = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 4  end, awful.util.taglist_buttons)
+    s.mytaglists = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 5  end, awful.util.taglist_buttons)
+    s.mytaglistx = awful.widget.taglist(s, function(t) return  math.floor((t.index - 1) / 4) == 6  end, awful.util.taglist_buttons)
+
 
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
-    -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 18, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mystatusbar = wibox.widget {
+      layout = wibox.layout.fixed.horizontal,
+      arrow(theme.bg_normal, "#343434"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        mailicon, 
+        mail and mail.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#343434"),
+      arrow("#343434", "#8F654B"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        volicon, 
+        theme.volume.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#8F654B"),
+      arrow("#8F654B", "#7B99BD"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        weathericon, 
+        theme.weather.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#7B99BD"),
+      arrow("#7B99BD", "#777E76"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        memicon, 
+        mem.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#777E76"),
+      arrow("#777E76", "#4B696D"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        cpuicon, 
+        cpu.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#4B696D"),
+      arrow("#4B696D", "#8DAA9A"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        baticon, 
+        bat.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#8DAA9A"),
+      arrow("#8DAA9A", "#C0C0A2"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        neticon, 
+        net.widget, 
+        layout = wibox.layout.align.horizontal 
+      }, 4, 8), "#C0C0A2"),
+      arrow("#C0C0A2", "#777E76"),
+      wibox.container.background(wibox.container.margin(kbdlayout.widget, 4, 8), "#777E76"),
+      wibox.container.background(wibox.container.margin(wibox.widget { 
+        clock, 
+        layout = wibox.layout.fixed.horizontal
+      }, 4, 8), "#777E76"),
+      arrow("#777E76", "alpha"),
+      wibox.container.margin(s.mylayoutbox, 4, 8),
+    }
 
+    -- Create the wibox
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = 36, bg = theme.bg_normal, fg = theme.fg_normal })
+    
     -- Add widgets to the wibox
     s.mywibox:setup {
+      layout = wibox.layout.fixed.vertical,
+      {
+        forced_height = 18,
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
-            --spr,
-            wibox.container.background(wibox.container.margin(s.mytaglist0, 4, 7),"#5B799D"),
-            arrowr("#5B799D","#3B597D"),
-            wibox.container.background(wibox.container.margin(s.mytaglist1, 4, 7),"#3B597D"),
-            arrowr("#3B597D","#1B395D"),
-            wibox.container.background(wibox.container.margin(s.mytaglist2, 4, 7),"#1B395D"),
-            arrowr("#1B395D","#0B193D"),
-            wibox.container.background(wibox.container.margin(s.mytaglist3, 4, 7),"#0B193D"),
-            arrowr("#0B193D", "#A43464"),
-            wibox.container.background(wibox.container.margin(s.mypromptbox, 4, 17), "#A43464"),
-            arrowr("#A43464", theme.bg_normal),
+          layout = wibox.layout.fixed.horizontal,
+          --spr,
+          wibox.container.background(wibox.container.margin(s.mytaglist0, 4, 7),"#5B799D"),
+          arrowr("#5B799D","#3B597D"),
+          wibox.container.background(wibox.container.margin(s.mytaglistg, 4, 7),"#3B597D"),
+          arrowr("#3B597D","#1B395D"),
+          wibox.container.background(wibox.container.margin(s.mytaglisth, 4, 7),"#1B395D"),
+          arrowr("#1B395D","#0B193D"),
+          wibox.container.background(wibox.container.margin(s.mytaglistx, 4, 7),"#0B193D"),
+          arrowr("#0B193D", "#A43464"),
+          wibox.container.background(wibox.container.margin(s.mypromptbox, 4, 17), "#A43464"),
+          arrowr("#A43464", theme.bg_normal),
         },
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            arrow(theme.bg_normal, "#343434"),
-            wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
-            arrow("#343434", "#8F654B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#8F654B"),
-            arrow("#8F654B", "#7B99BD"),
-            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 3, 6), "#7B99BD"),
-            arrow("#7B99BD", "#777E76"),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), "#777E76"),
-            arrow("#777E76", "#4B696D"),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), "#4B696D"),
-            arrow("#4B696D", "#8DAA9A"),
-            --arrow("#4B3B51", "#CB755B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
-            arrow("#8DAA9A", "#C0C0A2"),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#C0C0A2"),
-            arrow("#C0C0A2", "#777E76"),
-            wibox.container.background(wibox.container.margin(kbdlayout.widget, 4, 8), "#777E76"),
-            wibox.container.background(wibox.container.margin(clock, 4, 8), "#777E76"),
-            arrow("#777E76", "alpha"),
-            --]]
-            s.mylayoutbox,
+        nil,
+        s.mystatusbar
+      },
+      nil,
+      {
+        forced_height = 18,
+        layout = wibox.layout.fixed.horizontal,
+        { -- Left widgets
+          layout = wibox.layout.fixed.horizontal,
+          wibox.container.background(wibox.container.margin(s.mytaglistt, 4, 7),"#567197"),
+          arrowr("#567197","#365177"),
+          wibox.container.background(wibox.container.margin(s.mytaglistn, 4, 7),"#365177"),
+          arrowr("#365177","#163157"),
+          wibox.container.background(wibox.container.margin(s.mytaglists, 4, 7),"#163157"),
+          arrowr("#163157", theme.bg_normal),
         },
+        s.mytasklist
+      }
     }
 end
 
