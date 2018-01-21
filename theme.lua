@@ -245,15 +245,10 @@ local net = lain.widget.net({
 
 -- xkbmap
 kbdlayout = lain.widget.contrib.kbdlayout({
-    layouts = { { layout = "dvorak" },
-	            { layout = "gb" } },
+    layouts = { { layout = "dvorak", variant = "-option caps:swapescape -option compose:ralt" },
+	            { layout = "gb", variant = "-option caps:swapescape -option compose:ralt"  } },
     settings = function()
-        if kbdlayout_now.variant then
-            widget:set_text(string.format("%s/%s", kbdlayout_now.layout,
-            kbdlayout_now.variant))
-        else
-            widget:set_text(kbdlayout_now.layout)
-        end
+        widget:set_text(kbdlayout_now.layout)
     end
 })
 
