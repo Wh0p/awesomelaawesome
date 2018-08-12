@@ -243,14 +243,23 @@ local net = lain.widget.net({
     end
 })
 
--- xkbmap
-kbdlayout = lain.widget.contrib.kbdlayout({
-    layouts = { { layout = "dvorak", variant = "-option caps:swapescape -option compose:ralt" },
-	            { layout = "gb", variant = "-option caps:swapescape -option compose:ralt"  } },
-    settings = function()
-        widget:set_text(kbdlayout_now.layout)
-    end
-})
+-- Keyboard map indicator and changer
+kbdcfg = {}
+kbdcfg.cmd = "setxkbmap"
+kbdcfg.layout = { { "dvorak", "-option caps:swapescape -option compose:ralt"   }, { "gb", "-option caps:swapescape -option compose:ralt" } }
+kbdcfg.current = 1  
+kbdcfg.widget = wibox.widget.textbox()
+kbdcfg.widget:set_text(" " .. kbdcfg.layout[kbdcfg.current][1] .. " ")
+kbdcfg.switch = function ()
+  kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+  local t = kbdcfg.layout[kbdcfg.current]
+  kbdcfg.widget:set_text(" " .. t[1] .. " ")
+  os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
+end
+kbdcfg.widget:buttons(
+ awful.util.table.join(awful.button({ }, 1, function () kbdcfg.switch() end))
+)
+
 
 -- Separators
 local arrow = separators.arrow_left
@@ -361,7 +370,7 @@ function theme.at_screen_connect(s)
         layout = wibox.layout.align.horizontal 
       }, 4, 8), "#C0C0A2"),
       arrow("#C0C0A2", "#777E76"),
-      wibox.container.background(wibox.container.margin(kbdlayout.widget, 4, 8), "#777E76"),
+      wibox.container.background(wibox.container.margin(kbdcfg.widget, 4, 8), "#777E76"),
       wibox.container.background(wibox.container.margin(wibox.widget { 
         clock, 
         layout = wibox.layout.fixed.horizontal
